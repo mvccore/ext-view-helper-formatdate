@@ -1,7 +1,7 @@
 {
 	"name": "mvccore/ext-view-helper-formatdate",
 	"type": "library",
-	"description": "MvcCore Extension - View Helper - Format Date & Time - format given date or time by `Intl` extension or by `strftime()` as fallback.",
+	"description": "MvcCore Extension - View Helper - FormatDate - format given date or time by `Intl` extension or by `strftime()` as fallback.",
 	"keywords": [
 		"mvc", 
 		"mvccore", 
