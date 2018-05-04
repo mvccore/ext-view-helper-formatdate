@@ -1,0 +1,46 @@
+{
+	"name": "mvccore/ext-view-helper-formatdate",
+	"type": "library",
+	"description": "MvcCore Extension - View Helper - Format Date & Time - format given date or time by `Intl` extension or by `strftime()` as fallback.",
+	"keywords": [
+		"mvc", 
+		"mvccore", 
+		"framework", 
+		"extension", 
+		"plugin", 
+		"plug-in", 
+		"ext", 
+		"view", 
+		"helper", 
+		"viewhelper", 
+		"format", 
+		"date", 
+		"time", 
+		"datetime", 
+		"timestamp", 
+		"intl", 
+		"locale", 
+		"conventions"
+	],
+	"license": ["BSD-3-Clause"],
+	"authors": [{
+		"name": "Tom Flidr",
+		"homepage": "https://github.com/tomFlidr"
+	}],
+	"repositories": [{
+		"type": "path",
+		"url": "../../packages"
+	}],
+	"require": {
+		"php": ">=5.4.0",
+		"mvccore/ext-view-helper-internationalized": "dev-master"
+	},
+	"require-dev": {
+		"php": ">=5.4.0",
+		"mvccore/ext-view-helper-internationalized": "@dev"
+	},
+	"autoload": {
+		"classmap": ["src/"]
+	},
+	"minimum-stability": "dev"
+}
