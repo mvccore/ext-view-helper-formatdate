@@ -218,7 +218,7 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 *							 islamic, persian, etc.) and, if NULL is given for the timezone parameter, also the timezone used.
 	 * @return string
 	 */
-	public function FormatDateTime (
+	public function FormatDate (
 		$dateTimeOrTimestamp = NULL,
 		$dateTypeOrFormatMask = NULL,
 		$timeType = NULL,
