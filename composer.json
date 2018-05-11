@@ -27,20 +27,12 @@
 		"name": "Tom Flidr",
 		"homepage": "https://github.com/tomFlidr"
 	}],
-	"repositories": [{
-		"type": "path",
-		"url": "../../packages"
-	}],
 	"require": {
 		"php": ">=5.4.0",
-		"mvccore/ext-view-helper-internationalized": "dev-master"
-	},
-	"require-dev": {
-		"php": ">=5.4.0",
-		"mvccore/ext-view-helper-internationalized": "@dev"
+		"mvccore/ext-view-helper-internationalized": "^5.0.0"
 	},
 	"autoload": {
 		"classmap": ["src/"]
 	},
-	"minimum-stability": "dev"
+	"minimum-stability": "stable"
 }
