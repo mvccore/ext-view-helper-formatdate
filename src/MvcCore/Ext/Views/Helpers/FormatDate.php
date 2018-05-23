@@ -11,7 +11,7 @@
  * @license		https://mvccore.github.io/docs/mvccore/5.0.0/LICENCE.md
  */
 
-namespace MvcCore\Ext\View\Helpers;
+namespace MvcCore\Ext\Views\Helpers;
 
 /**
  * Responsibility - format given date by `Intl` extension or by `strftime()` as fallback.
@@ -20,7 +20,7 @@ namespace MvcCore\Ext\View\Helpers;
  * - System locale settings for fallback conversion automaticly configured by request language and request locale.
  * - Fallback result string always returned in response encoding, in UTF-8 by default.
  */
-class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
+class FormatDate extends \MvcCore\Ext\Views\Helpers\Internationalized
 {
 	/**
 	 * MvcCore Extension - View Helper - Assets - version:
@@ -33,8 +33,8 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 * If this static property is set - helper is possible
 	 * to configure as singleton before it's used for first time.
 	 * Example:
-	 *	`\MvcCore\Ext\View\Helpers\FormatDate::GetInstance()`
-	 * @var \MvcCore\Ext\View\Helpers\FormatDate
+	 *	`\MvcCore\Ext\Views\Helpers\FormatDate::GetInstance()`
+	 * @var \MvcCore\Ext\Views\Helpers\FormatDate
 	 */
 	protected static $instance;
 
@@ -112,7 +112,7 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 * - `\IntlDateFormatter::FULL`		- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
 	 * If `NULL`, ICUʼs default date type will be used.
 	 * @param int|NULL $intlDefaultDateFormatter
-	 * @return \MvcCore\Ext\View\Helpers\FormatDate
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDate
 	 */
 	public function & SetIntlDefaultDateFormatter ($intlDefaultDateFormatter) {
 		$this->intlDefaultDateFormatter = $intlDefaultDateFormatter;
@@ -128,7 +128,7 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 * - `\IntlDateFormatter::FULL`		- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
 	 * If `NULL`, ICUʼs default time type will be used.
 	 * @param int|NULL $intlDefaultTimeFormatter
-	 * @return \MvcCore\Ext\View\Helpers\FormatDate
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDate
 	 */
 	public function & SetIntlDefaultTimeFormatter ($intlDefaultTimeFormatter) {
 		$this->intlDefaultTimeFormatter = $intlDefaultTimeFormatter;
@@ -142,7 +142,7 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 * This ID must be a valid identifier on ICUʼs database or an ID
 	 * representing an explicit offset, such as GMT-05:30.
 	 * @param string|\IntlTimeZone|\DateTimeZone|NULL $intlDefaultTimeZone
-	 * @return \MvcCore\Ext\View\Helpers\FormatDate
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDate
 	 */
 	public function & SetIntlDefaultTimeZone ($intlDefaultTimeZone) {
 		$this->intlDefaultTimeZone = $intlDefaultTimeZone;
@@ -159,7 +159,7 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 * timezone parameter, also the timezone used.
 	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants.calendartypes
 	 * @param int|NULL $intlDefaultCalendar
-	 * @return \MvcCore\Ext\View\Helpers\FormatDate
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDate
 	 */
 	public function & SetIntlDefaultCalendar ($intlDefaultCalendar) {
 		$this->intlDefaultCalendar = $intlDefaultCalendar;
@@ -171,7 +171,7 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 * This method is used only for fallback if formating is not by `Intl` extension.
 	 * @see http://php.net/strftime
 	 * @param string $formatMask
-	 * @return \MvcCore\Ext\View\Helpers\FormatDate
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDate
 	 */
 	public function & SetStrftimeFormatMask ($strftimeFormatMask = '%e. %B %G, %H:%M:%S') {
 		$this->strftimeFormatMask = $strftimeFormatMask;
@@ -183,7 +183,7 @@ class FormatDate extends \MvcCore\Ext\View\Helpers\Internationalized
 	 * If you don't want to specify all arguments for each helper callback, use setters
 	 * instead to set up default values for `Intl` extension formating r for `strftime()`  formating.
 	 * You can use `$this->GetHelper('FormatDateTime')->SetAnything(...);` in view template
-	 * or `\MvcCore\Ext\View\Helpers\FormatDate::GetInstance()->SetAnything(...);` anywhere else.
+	 * or `\MvcCore\Ext\Views\Helpers\FormatDate::GetInstance()->SetAnything(...);` anywhere else.
 	 * @see http://php.net/manual/en/intldateformatter.create.php
 	 * @see http://php.net/strftime
 	 * @param \DateTime|\IntlCalendar|int|NULL $dateTimeOrTimestamp Value to format. This may be a `\DateTime\ object, an `\IntlCalendar\ object,
