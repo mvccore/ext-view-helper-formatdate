@@ -93,7 +93,7 @@ class FormatDate extends \MvcCore\Ext\Views\Helpers\Internationalized
 	 * This property is used only for fallback if formating is not by `Intl` extension.
 	 * @var \int[]
 	 */
-	protected $localeCategories = array(LC_TIME);
+	protected $localeCategories = [LC_TIME];
 
 	/**
 	 * Custom format mask in used by PHP `strftime();`:
@@ -272,10 +272,10 @@ class FormatDate extends \MvcCore\Ext\Views\Helpers\Internationalized
 	 * @return \IntlDateFormatter
 	 */
 	protected function & getIntlDatetimeFormater ($langAndLocale = NULL, $dateType = NULL, $timeType = NULL, $timeZone = NULL, $calendar = NULL) {
-		$key = implode('_', array(
+		$key = implode('_', [
 			'datetime',
 			serialize(func_get_args())
-		));
+		]);
 		if (!isset($this->intlFormaters[$key])) {
 			$this->intlFormaters[$key] = \datefmt_create(
 				$this->langAndLocale, $dateType, $timeType, $timeZone, $calendar
