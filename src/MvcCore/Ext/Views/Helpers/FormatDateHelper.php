@@ -15,16 +15,16 @@ namespace MvcCore\Ext\Views\Helpers;
 
 /**
  * Responsibility - format given date by `Intl` extension or by `strftime()` as fallback.
- * - Possibility to configure `Intl` datetime formater default arguments.
+ * - Possibility to configure `Intl` datetime formatter default arguments.
  * - Possibility to configure format mask used by PHP `strftime(); for fallback`.
- * - System locale settings for fallback conversion automaticly configured by request language and request locale.
+ * - System locale settings for fallback conversion automatically configured by request language and request locale.
  * - Fallback result string always returned in response encoding, in UTF-8 by default.
  */
 class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelper
 {
 	/**
 	 * MvcCore Extension - View Helper - Assets - version:
-	 * Comparation by PHP function version_compare();
+	 * Comparison by PHP function version_compare();
 	 * @see http://php.net/manual/en/function.version-compare.php
 	 */
 	const VERSION = '5.0.0-alpha';
@@ -88,16 +88,16 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	protected $intlDefaultCalendar = NULL;
 
 	/**
-	 * System `setlocale()` category to set up system locale automaticly
+	 * System `setlocale()` category to set up system locale automatically
 	 * in `parent::setUpSystemLocaleAndEncodings()` method.
-	 * This property is used only for fallback if formating is not by `Intl` extension.
+	 * This property is used only for fallback if formatting is not by `Intl` extension.
 	 * @var \int[]
 	 */
 	protected $localeCategories = [LC_TIME];
 
 	/**
 	 * Custom format mask in used by PHP `strftime();`:
-	 * This property is used only for fallback if formating is not by `Intl` extension.
+	 * This property is used only for fallback if formatting is not by `Intl` extension.
 	 * @see http://php.net/strftime
 	 * @var string
 	 */
@@ -168,7 +168,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 
 	/**
 	 * Set custom format mask used by PHP `strftime();`.
-	 * This method is used only for fallback if formating is not by `Intl` extension.
+	 * This method is used only for fallback if formatting is not by `Intl` extension.
 	 * @see http://php.net/strftime
 	 * @param string $formatMask
 	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
@@ -181,7 +181,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	/**
 	 * Format given date by `datefmt_format()` (in `Intl` extension) or by `strftime()` as fallback.
 	 * If you don't want to specify all arguments for each helper callback, use setters
-	 * instead to set up default values for `Intl` extension formating r for `strftime()`  formating.
+	 * instead to set up default values for `Intl` extension formatting r for `strftime()`  formatting.
 	 * You can use `$this->GetHelper('FormatDate')->SetAnything(...);` in view template
 	 * or `\MvcCore\Ext\Views\Helpers\FormatDateHelper::GetInstance()->SetAnything(...);` anywhere else.
 	 * @see http://php.net/manual/en/intldateformatter.create.php
@@ -228,9 +228,9 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 		$dateTimeToFormat = $dateTimeOrTimestamp === NULL
 			? time()
 			: $dateTimeOrTimestamp;
-		if ($this->intlExtensionFormating) {
+		if ($this->intlExtensionFormatting) {
 			$dateType = $dateTypeOrFormatMask;
-			$formater = $this->getIntlDatetimeFormater(
+			$formatter = $this->getIntlDatetimeFormatter(
 				$this->langAndLocale,
 				$dateType !== NULL
 					? $dateType
@@ -245,7 +245,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 					? $calendar
 					: $this->intlDefaultCalendar
 			);
-			return \datefmt_format($formater, $dateTimeToFormat);
+			return \datefmt_format($formatter, $dateTimeToFormat);
 		} else {
 			if ($this->encodingConversion === NULL)
 				$this->setUpSystemLocaleAndEncodings();
@@ -271,16 +271,16 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @param int|NULL $calendar
 	 * @return \IntlDateFormatter
 	 */
-	protected function & getIntlDatetimeFormater ($langAndLocale = NULL, $dateType = NULL, $timeType = NULL, $timeZone = NULL, $calendar = NULL) {
+	protected function & getIntlDatetimeFormatter ($langAndLocale = NULL, $dateType = NULL, $timeType = NULL, $timeZone = NULL, $calendar = NULL) {
 		$key = implode('_', [
 			'datetime',
 			serialize(func_get_args())
 		]);
-		if (!isset($this->intlFormaters[$key])) {
-			$this->intlFormaters[$key] = \datefmt_create(
+		if (!isset($this->intlFormatters[$key])) {
+			$this->intlFormatters[$key] = \datefmt_create(
 				$this->langAndLocale, $dateType, $timeType, $timeZone, $calendar
 			);
 		}
-		return $this->intlFormaters[$key];
+		return $this->intlFormatters[$key];
 	}
 }
