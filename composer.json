@@ -29,10 +29,10 @@
 	}],
 	"require": {
 		"php": ">=5.4.0",
-		"mvccore/ext-view-helper-internationalized": "^5.0.0"
+		"mvccore/ext-view-helper-internationalized": "dev-master"
 	},
 	"autoload": {
 		"classmap": ["src/"]
 	},
-	"minimum-stability": "stable"
+	"minimum-stability": "dev"
 }
