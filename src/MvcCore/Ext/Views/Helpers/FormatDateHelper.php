@@ -257,7 +257,9 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 				$dateTypeOrFormatMask !== NULL
 					? $dateTypeOrFormatMask
 					: $this->strftimeFormatMask,
-				$dateTimeToFormat
+				$dateTimeToFormat instanceof \DateTime
+					? $dateTimeToFormat->getTimestamp()
+					: intval($dateTimeToFormat)
 			);
 			return $this->encode($result);
 		}
