@@ -115,7 +115,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @param int|NULL $intlDefaultDateFormatter
 	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
 	 */
-	public function & SetIntlDefaultDateFormatter ($intlDefaultDateFormatter) {
+	public function SetIntlDefaultDateFormatter ($intlDefaultDateFormatter) {
 		$this->intlDefaultDateFormatter = $intlDefaultDateFormatter;
 		return $this;
 	}
@@ -131,7 +131,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @param int|NULL $intlDefaultTimeFormatter
 	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
 	 */
-	public function & SetIntlDefaultTimeFormatter ($intlDefaultTimeFormatter) {
+	public function SetIntlDefaultTimeFormatter ($intlDefaultTimeFormatter) {
 		$this->intlDefaultTimeFormatter = $intlDefaultTimeFormatter;
 		return $this;
 	}
@@ -145,7 +145,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @param string|\IntlTimeZone|\DateTimeZone|NULL $intlDefaultTimeZone
 	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
 	 */
-	public function & SetIntlDefaultTimeZone ($intlDefaultTimeZone) {
+	public function SetIntlDefaultTimeZone ($intlDefaultTimeZone) {
 		$this->intlDefaultTimeZone = $intlDefaultTimeZone;
 		return $this;
 	}
@@ -162,7 +162,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @param int|NULL $intlDefaultCalendar
 	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
 	 */
-	public function & SetIntlDefaultCalendar ($intlDefaultCalendar) {
+	public function SetIntlDefaultCalendar ($intlDefaultCalendar) {
 		$this->intlDefaultCalendar = $intlDefaultCalendar;
 		return $this;
 	}
@@ -174,7 +174,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @param string $formatMask
 	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
 	 */
-	public function & SetStrftimeFormatMask ($strftimeFormatMask = '%e. %B %G, %H:%M:%S') {
+	public function SetStrftimeFormatMask ($strftimeFormatMask = '%e. %B %G, %H:%M:%S') {
 		$this->strftimeFormatMask = $strftimeFormatMask;
 		return $this;
 	}
@@ -274,7 +274,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @param int|NULL $calendar
 	 * @return \IntlDateFormatter
 	 */
-	protected function & getIntlDatetimeFormatter ($langAndLocale = NULL, $dateType = NULL, $timeType = NULL, $timeZone = NULL, $calendar = NULL) {
+	protected function getIntlDatetimeFormatter ($langAndLocale = NULL, $dateType = NULL, $timeType = NULL, $timeZone = NULL, $calendar = NULL) {
 		$key = implode('_', [
 			'datetime',
 			serialize(func_get_args())
