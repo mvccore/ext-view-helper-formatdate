@@ -28,7 +28,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * Comparison by PHP function version_compare();
 	 * @see http://php.net/manual/en/function.version-compare.php
 	 */
-	const VERSION = '5.0.0';
+	const VERSION = '5.0.1';
 
 	/**
 	 * If this static property is set - helper is possible
@@ -226,9 +226,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 		$timeZone = NULL,
 		$calendar = NULL
 	) {
-		$dateTimeToFormat = $dateTimeOrTimestamp === NULL
-			? time()
-			: $dateTimeOrTimestamp;
+		if ($dateTimeOrTimestamp === NULL) return '';
 		if ($this->intlExtensionFormatting) {
 			$dateType = $dateTypeOrFormatMask;
 			$formatter = $this->getIntlDatetimeFormatter(
