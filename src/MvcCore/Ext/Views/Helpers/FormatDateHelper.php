@@ -244,7 +244,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 					? $calendar
 					: $this->intlDefaultCalendar
 			);
-			return \datefmt_format($formatter, $dateTimeToFormat);
+			return \datefmt_format($formatter, $dateTimeOrTimestamp);
 		} else {
 			if ($this->encodingConversion === NULL)
 				$this->setUpSystemLocaleAndEncodings();
@@ -255,9 +255,9 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 				$dateTypeOrFormatMask !== NULL
 					? $dateTypeOrFormatMask
 					: $this->strftimeFormatMask,
-				$dateTimeToFormat instanceof \DateTime
-					? $dateTimeToFormat->getTimestamp()
-					: intval($dateTimeToFormat)
+				$dateTimeOrTimestamp instanceof \DateTime
+					? $dateTimeOrTimestamp->getTimestamp()
+					: intval($dateTimeOrTimestamp)
 			);
 			return $this->encode($result);
 		}
