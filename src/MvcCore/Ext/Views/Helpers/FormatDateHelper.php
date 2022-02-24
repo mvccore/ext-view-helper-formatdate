@@ -38,56 +38,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * @var \MvcCore\Ext\Views\Helpers\FormatDateHelper
 	 */
 	protected static $instance;
-
-	/**
-	 * Default date type to use:
-	 * - `\IntlDateFormatter::NONE`		- Do not include this element
-	 * - `\IntlDateFormatter::SHORT`	- Most abbreviated style, only essential data (12/13/52 or 3:30pm)
-	 * - `\IntlDateFormatter::MEDIUM`	- Medium style (Jan 12, 1952)
-	 * - `\IntlDateFormatter::LONG`		- Long style (January 12, 1952 or 3:30:32pm)
-	 * - `\IntlDateFormatter::FULL`		- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
-	 * If `NULL`, ICUʼs default date type will be used.
-	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
-	 * @var int|NULL
-	 */
-	protected $intlDefaultDateFormatter = NULL;
-
-	/**
-	 * Default time type to use:
-	 * - `\IntlDateFormatter::NONE`		- Do not include this element
-	 * - `\IntlDateFormatter::SHORT`	- Most abbreviated style, only essential data (12/13/52 or 3:30pm)
-	 * - `\IntlDateFormatter::MEDIUM`	- Medium style (Jan 12, 1952)
-	 * - `\IntlDateFormatter::LONG`		- Long style (January 12, 1952 or 3:30:32pm)
-	 * - `\IntlDateFormatter::FULL`		- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
-	 * If `NULL`, ICUʼs default time type will be used.
-	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
-	 * @var int|NULL
-	 */
-	protected $intlDefaultTimeFormatter = NULL;
-
-	/**
-	 * Time zone ID. The default (and the one used if `NULL` is given)
-	 * is the one returned by `date_default_timezone_get()` or, if applicable,
-	 * that of the `\IntlCalendar` object passed for the calendar parameter.
-	 * This ID must be a valid identifier on ICUʼs database or an ID
-	 * representing an explicit offset, such as GMT-05:30.
-	 * @var string|\IntlTimeZone|\DateTimeZone|NULL
-	 */
-	protected $intlDefaultTimeZone = NULL;
-
-	/**
-	 * Calendar to use for formatting or parsing. The default value is NULL,
-	 * which corresponds to `\IntlDateFormatter::GREGORIAN`. This can either be
-	 * one of the `\IntlDateFormatter` calendar constants or an `\IntlCalendar`.
-	 * Any `\IntlCalendar` object passed will be clone; it will not be changed
-	 * by the `\IntlDateFormatter`. This will determine the calendar type used
-	 * (`gregorian`, `islamic`, `persian`, etc.) and, if `NULL` is given for the
-	 * timezone parameter, also the timezone used.
-	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants.calendartypes
-	 * @var int|NULL
-	 */
-	protected $intlDefaultCalendar = NULL;
-
+	
 	/**
 	 * System `setlocale()` category to set up system locale automatically
 	 * in `parent::setUpSystemLocaleAndEncodings()` method.
@@ -97,61 +48,54 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	protected $localeCategories = [LC_TIME];
 
 	/**
-	 * Custom format mask in used by PHP `strftime();`:
-	 * This property is used only for fallback if formatting is not by `Intl` extension.
+	 * Default format mask for `Intl` formatter (by ICU) 
+	 * or default format mask for deprecated PHP function `strftime();`.
+	 * Default value is format mask for `Intl` formatter: `d. MMMM yyyy, kk:mm:ss`.
+	 * The same format for deprecated PHP function `strftime()` could be: `%e. %B %G, %H:%M:%S`.
+	 * @see https://unicode-org.github.io/icu/userguide/format_parse/datetime/
 	 * @see http://php.net/strftime
 	 * @var string
 	 */
-	protected $strftimeFormatMask = '%e. %B %G, %H:%M:%S';
-
+	protected $defaultFormatMask = 'd. MMMM yyyy, kk:mm:ss';
+	
 	/**
-	 * Set default date type to use:
-	 * - `\IntlDateFormatter::NONE`		- Do not include this element
-	 * - `\IntlDateFormatter::SHORT`	- Most abbreviated style, only essential data (12/13/52 or 3:30pm)
-	 * - `\IntlDateFormatter::MEDIUM`	- Medium style (Jan 12, 1952)
-	 * - `\IntlDateFormatter::LONG`		- Long style (January 12, 1952 or 3:30:32pm)
-	 * - `\IntlDateFormatter::FULL`		- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
-	 * If `NULL`, ICUʼs default date type will be used.
-	 * @param int|NULL $intlDefaultDateFormatter
-	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 * Default timezone string ID or default timezone object. 
+	 * Default value of this property is timezone returned by 
+	 * `date_default_timezone_get()`. The value has to be valid 
+	 * identifier in ICU database or an ID representing 
+	 * an explicit offset, such as GMT-05:30.
+	 * @var string|\DateTimeZone|\IntlTimeZone|NULL
 	 */
-	public function SetIntlDefaultDateFormatter ($intlDefaultDateFormatter) {
-		$this->intlDefaultDateFormatter = $intlDefaultDateFormatter;
-		return $this;
-	}
+	protected $defaultTimeZone = NULL;
 
 	/**
-	 * Set default time type to use:
-	 * - `\IntlDateFormatter::NONE`		- Do not include this element
-	 * - `\IntlDateFormatter::SHORT`	- Most abbreviated style, only essential data (12/13/52 or 3:30pm)
-	 * - `\IntlDateFormatter::MEDIUM`	- Medium style (Jan 12, 1952)
-	 * - `\IntlDateFormatter::LONG`		- Long style (January 12, 1952 or 3:30:32pm)
-	 * - `\IntlDateFormatter::FULL`		- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
-	 * If `NULL`, ICUʼs default time type will be used.
-	 * @param int|NULL $intlDefaultTimeFormatter
-	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 * Default `Intl` formatter date type:
+	 * - `\IntlDateFormatter::NONE`   - Do not include this element.
+	 * - `\IntlDateFormatter::SHORT`  - Most abbreviated style, only essential data (12/13/52 or 3:30pm).
+	 * - `\IntlDateFormatter::MEDIUM` - Medium style (Jan 12, 1952).
+	 * - `\IntlDateFormatter::LONG`   - Long style (January 12, 1952 or 3:30:32pm).
+	 * - `\IntlDateFormatter::FULL`   - Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST).
+	 * `\IntlDateFormatter::MEDIUM` is used by default.
+	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
+	 * @var int|NULL
 	 */
-	public function SetIntlDefaultTimeFormatter ($intlDefaultTimeFormatter) {
-		$this->intlDefaultTimeFormatter = $intlDefaultTimeFormatter;
-		return $this;
-	}
+	protected $defaultIntlDateType = \IntlDateFormatter::MEDIUM;
 
 	/**
-	 * Set default time zone ID. The default (and the one used if `NULL` is given)
-	 * is the one returned by `date_default_timezone_get()` or, if applicable,
-	 * that of the `\IntlCalendar` object passed for the calendar parameter.
-	 * This ID must be a valid identifier on ICUʼs database or an ID
-	 * representing an explicit offset, such as GMT-05:30.
-	 * @param string|\IntlTimeZone|\DateTimeZone|NULL $intlDefaultTimeZone
-	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 * Default `Intl` formatter time type:
+	 * - `\IntlDateFormatter::NONE`   - Do not include this element.
+	 * - `\IntlDateFormatter::SHORT`  - Most abbreviated style, only essential data (12/13/52 or 3:30pm).
+	 * - `\IntlDateFormatter::MEDIUM` - Medium style (Jan 12, 1952).
+	 * - `\IntlDateFormatter::LONG`   - Long style (January 12, 1952 or 3:30:32pm).
+	 * - `\IntlDateFormatter::FULL`   - Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST).
+	 * `\IntlDateFormatter::MEDIUM` is used by default.
+	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
+	 * @var int|NULL
 	 */
-	public function SetIntlDefaultTimeZone ($intlDefaultTimeZone) {
-		$this->intlDefaultTimeZone = $intlDefaultTimeZone;
-		return $this;
-	}
+	protected $defaultIntlTimeType = \IntlDateFormatter::MEDIUM;
 
 	/**
-	 * Set default calendar to use for formatting or parsing. The default value is NULL,
+	 * Calendar to use for formatting. The default value is NULL,
 	 * which corresponds to `\IntlDateFormatter::GREGORIAN`. This can either be
 	 * one of the `\IntlDateFormatter` calendar constants or an `\IntlCalendar`.
 	 * Any `\IntlCalendar` object passed will be clone; it will not be changed
@@ -159,92 +103,187 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 	 * (`gregorian`, `islamic`, `persian`, etc.) and, if `NULL` is given for the
 	 * timezone parameter, also the timezone used.
 	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants.calendartypes
-	 * @param int|NULL $intlDefaultCalendar
-	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 * @var int|NULL
 	 */
-	public function SetIntlDefaultCalendar ($intlDefaultCalendar) {
-		$this->intlDefaultCalendar = $intlDefaultCalendar;
-		return $this;
+	protected $defaultIntlCalendar = NULL;
+
+	
+	/**
+	 * Create new datetime helper instance, set boolean about 
+	 * `Intl` extension formatting by loaded extension and set
+	 * default format mask by determinated formatting.
+	 * @return void
+	 */
+	public function __construct () {
+		parent::__construct();
+		if (!$this->intlExtensionFormatting)
+			$this->defaultFormatMask = '%e. %B %G, %H:%M:%S';
 	}
 
 	/**
-	 * Set custom format mask used by PHP `strftime();`.
-	 * This method is used only for fallback if formatting is not by `Intl` extension.
+	 * Set default format mask for `Intl` formatter (by ICU) 
+	 * or set default format mask for deprecated PHP function `strftime();`.
+	 * Default value is format mask for `Intl` formatter: `d. MMMM yyyy, kk:mm:ss`.
+	 * The same format for deprecated PHP function `strftime()` could be: `%e. %B %G, %H:%M:%S`.
+	 * @see https://unicode-org.github.io/icu/userguide/format_parse/datetime/
 	 * @see http://php.net/strftime
-	 * @param string $formatMask
+	 * @param  string $defaultFormatMask
 	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
 	 */
-	public function SetStrftimeFormatMask ($strftimeFormatMask = '%e. %B %G, %H:%M:%S') {
-		$this->strftimeFormatMask = $strftimeFormatMask;
+	public function SetDefaultFormatMask ($defaultFormatMask) {
+		$this->defaultFormatMask = $defaultFormatMask;
 		return $this;
 	}
 
 	/**
-	 * Format given date by `datefmt_format()` (in `Intl` extension) or by `strftime()` as fallback.
-	 * If you don't want to specify all arguments for each helper callback, use setters
-	 * instead to set up default values for `Intl` extension formatting r for `strftime()`  formatting.
-	 * You can use `$this->GetHelper('FormatDate')->SetAnything(...);` in view template
-	 * or `\MvcCore\Ext\Views\Helpers\FormatDateHelper::GetInstance()->SetAnything(...);` anywhere else.
+	 * Set default timezone string ID or default timezone object. 
+	 * Default value of this property is timezone returned by 
+	 * `date_default_timezone_get()`. The value has to be valid 
+	 * identifier in ICU database or an ID representing 
+	 * an explicit offset, such as GMT-05:30.
+	 * @param  string|\IntlTimeZone|\DateTimeZone|NULL $defaultTimeZone
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 */
+	public function SetDefaultTimeZone ($defaultTimeZone) {
+		$this->defaultTimeZone = $defaultTimeZone;
+		return $this;
+	}
+
+	/**
+	 * Set default `Intl` formatter date type:
+	 * - `\IntlDateFormatter::NONE`   - Do not include this element.
+	 * - `\IntlDateFormatter::SHORT`  - Most abbreviated style, only essential data (12/13/52 or 3:30pm).
+	 * - `\IntlDateFormatter::MEDIUM` - Medium style (Jan 12, 1952).
+	 * - `\IntlDateFormatter::LONG`   - Long style (January 12, 1952 or 3:30:32pm).
+	 * - `\IntlDateFormatter::FULL`   - Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST).
+	 * If `NULL`, ICU's default date type will be used.
+	 * @param  int|NULL $defaultIntlDateType
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 */
+	public function SetDefaultIntlDateType ($defaultIntlDateType) {
+		$this->defaultIntlDateType = $defaultIntlDateType;
+		return $this;
+	}
+
+	/**
+	 * Set default `Intl` formatter time type:
+	 * - `\IntlDateFormatter::NONE`   - Do not include this element.
+	 * - `\IntlDateFormatter::SHORT`  - Most abbreviated style, only essential data (12/13/52 or 3:30pm).
+	 * - `\IntlDateFormatter::MEDIUM` - Medium style (Jan 12, 1952).
+	 * - `\IntlDateFormatter::LONG`   - Long style (January 12, 1952 or 3:30:32pm).
+	 * - `\IntlDateFormatter::FULL`   - Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST).
+	 * If `NULL`, ICU's default time type will be used.
+	 * @param  int|NULL $defaultIntlTimeType
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 */
+	public function SetDefaultIntlTimeType ($defaultIntlTimeType) {
+		$this->defaultIntlTimeType = $defaultIntlTimeType;
+		return $this;
+	}
+
+	/**
+	 * Set default calendar to use for formatting. The default value is NULL,
+	 * which corresponds to `\IntlDateFormatter::GREGORIAN`. This can either be
+	 * one of the `\IntlDateFormatter` calendar constants or an `\IntlCalendar`.
+	 * Any `\IntlCalendar` object passed will be clone; it will not be changed
+	 * by the `\IntlDateFormatter`. This will determine the calendar type used
+	 * (`gregorian`, `islamic`, `persian`, etc.) and, if `NULL` is given for the
+	 * timezone parameter, also the timezone used.
+	 * @see http://php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants.calendartypes
+	 * @param  int|NULL $defaultIntlCalendar
+	 * @return \MvcCore\Ext\Views\Helpers\FormatDateHelper
+	 */
+	public function SetDefaultIntlCalendar ($defaultIntlCalendar) {
+		$this->defaultIntlCalendar = $defaultIntlCalendar;
+		return $this;
+	}
+
+
+	/**
+	 * Format given date by `datefmt_format()` (with `Intl` extension) 
+	 * or by `strftime()` by deprecated PHP fallback.
+	 * If you don't want to specify all arguments for each helper call, 
+	 * use helper setter methods to set up helper call default arguments:
+	 *  - `$dateHelper->SetDefaultFormatMask()`   - to set `$formatMask` argument
+	 *  - `$dateHelper->SetDefaultTimeZone()`     - to set `$timeZone` argument
+	 *  - `$dateHelper->SetDefaultIntlDateType()` - to set `$intlDateType` argument
+	 *  - `$dateHelper->SetDefaultIntlTimeType()` - to set `$intlTimeType` argument
+	 *  - `$dateHelper->SetDefaultIntlCalendar()` - to set `$intlCalendar` argument
 	 * @see http://php.net/manual/en/intldateformatter.create.php
+	 * @see https://unicode-org.github.io/icu/userguide/format_parse/datetime/
 	 * @see http://php.net/strftime
-	 * @param \DateTime|\IntlCalendar|int|NULL $dateTimeOrTimestamp Value to format. This may be a `\DateTime\ object, an `\IntlCalendar\ object,
-	 *																a numeric type representing a (possibly fractional) number of seconds since
-	 *																epoch or an array in the format output by localtime().
-	 * @param int|string|NULL $dateTypeOrFormatMask Any custom `\IntlDateFormatter` constant to specify second argument `int $datetype` for
-	 *												`datefmt_create()` function or custom `strftime()` format mask used as fallback.
-	 *												Default date types to use (if `NULL`, ICUʼs default date type will be used):
-	 *												- `\IntlDateFormatter::NONE`	- Do not include this element
-	 *												- `\IntlDateFormatter::SHORT`	- Most abbreviated style, only essential data (12/13/52 or 3:30pm)
-	 *												- `\IntlDateFormatter::MEDIUM`	- Medium style (Jan 12, 1952)
-	 *												- `\IntlDateFormatter::LONG`	- Long style (January 12, 1952 or 3:30:32pm)
-	 *												- `\IntlDateFormatter::FULL`	- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
-	 *												Fallback format mask for `strftime()` could look like `"%e. %B %G, %H:%M:%S"`.
-	 * @param int|NULL $timeType Any custom `\IntlDateFormatter` constant to specify third argument `int $timetype` for `datefmt_create()`.
-	 *							 Time types to use (if `NULL`, ICUʼs default time type will be used):
-	 *							 - `\IntlDateFormatter::NONE`	- Do not include this element
-	 *							 - `\IntlDateFormatter::SHORT`	- Most abbreviated style, only essential data (12/13/52 or 3:30pm)
-	 *							 - `\IntlDateFormatter::MEDIUM`	- Medium style (Jan 12, 1952)
-	 *							 - `\IntlDateFormatter::LONG`	- Long style (January 12, 1952 or 3:30:32pm)
-	 *							 - `\IntlDateFormatter::FULL`	- Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST)
-	 * @param string|\IntlTimeZone|\DateTimeZone|NULL $timeZone Any custom time zone ID. The default (and the one used if `NULL` is given)
-	 *															is the one returned by `date_default_timezone_get()` or, if applicable, that
-	 *															of the `\IntlCalendar` object passed for the calendar parameter. This ID must
-	 *															be a valid identifier on ICUʼs database or an ID representing an explicit
-	 *															offset, such as GMT-05:30. If you want to specify custom timezone for whole
-	 *															application, use `date_default_timezone_set('Europe/Prague');`...
-	 * @param int|NULL $calendar Calendar to use for formatting or parsing. The default value is `NULL`, which corresponds to
-	 *							 `\IntlDateFormatter::GREGORIAN`. This can either be one of the `\IntlDateFormatter` calendar
-	 *							 constants or an IntlCalendar. Any IntlCalendar object passed will be clone; it will not be
-	 *							 changed by the IntlDateFormatter. This will determine the calendar type used (gregorian,
-	 *							 islamic, persian, etc.) and, if NULL is given for the timezone parameter, also the timezone used.
+	 * @param  \IntlCalendar|\DateTimeInterface|array|string|int|float|NULL $dateTime
+	 *         Value to format. This may be a `\DateTime\ object, an `\IntlCalendar\ object,
+	 *         a numeric type representing a (possibly fractional) number of seconds since
+	 *         epoch or an array in the format output by `localtime()`.
+	 * @param  string|NULL                                                  $formatMask
+	 *         Format mask for `Intl` formatter (by ICU) or format mask for deprecated 
+	 *         PHP function `strftime();`. Default value is format mask for `Intl` 
+	 *         formatter is `d. MMMM yyyy, kk:mm:ss`. The same format for deprecated 
+	 *         PHP function `strftime()` could be: `%e. %B %G, %H:%M:%S`.
+	 * @param  string|\DateTimeZone|\IntlTimeZone|NULL                      $timeZone
+	 *         Timezone string ID or timezone object. Default value is timezone 
+	 *         returned by `date_default_timezone_get()`. The value has to be valid 
+	 *         identifier in ICU database or an ID representing an explicit offset, 
+	 *         such as GMT-05:30.
+	 * @param  int|NULL                                                     $intlDateType
+	 *         Date type format constant to specify `datefmt_create()` second argument 
+	 *         `int $datetype`. If `NULL`, there will be used ICU's default date type.
+	 *         Date types to use
+	 *         - `\IntlDateFormatter::NONE`   - Do not include this element.
+	 *         - `\IntlDateFormatter::SHORT`  - Most abbreviated style, only essential data (12/13/52 or 3:30pm).
+	 *         - `\IntlDateFormatter::MEDIUM` - Medium style (Jan 12, 1952).
+	 *         - `\IntlDateFormatter::LONG`   - Long style (January 12, 1952 or 3:30:32pm).
+	 *         - `\IntlDateFormatter::FULL`   - Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST).
+	 * @param  int|NULL                                                     $intlTimeType
+	 *         Time type format constant to specify `datefmt_create()` third argument 
+	 *         `int $timetype`. If `NULL`, there will be used ICU's default time type.
+	 *         Time types to use:
+	 *         - `\IntlDateFormatter::NONE`   - Do not include this element.
+	 *         - `\IntlDateFormatter::SHORT`  - Most abbreviated style, only essential data (12/13/52 or 3:30pm).
+	 *         - `\IntlDateFormatter::MEDIUM` - Medium style (Jan 12, 1952).
+	 *         - `\IntlDateFormatter::LONG`   - Long style (January 12, 1952 or 3:30:32pm).
+	 *         - `\IntlDateFormatter::FULL`   - Completely specified style (Tuesday, April 12, 1952 AD or 3:30:42pm PST).
+	 * @param  int|NULL                                                     $intlCalendar
+	 *         Calendar to use for formatting. The default value is `NULL`, 
+	 *         which corresponds to `\IntlDateFormatter::GREGORIAN`. This can either 
+	 *         be one of the `\IntlDateFormatter` calendar constants or an `\IntlCalendar`. 
+	 *         Any `\IntlCalendar` object passed will be clone; it will not be changed 
+	 *         by the `\IntlDateFormatter`. This will determine the calendar type used 
+	 *         (gregorian, islamic, persian, etc.) and, if `NULL` is given for the timezone 
+	 *         parameter, also the timezone used.
 	 * @return string
 	 */
 	public function FormatDate (
-		$dateTimeOrTimestamp = NULL,
-		$dateTypeOrFormatMask = NULL,
-		$timeType = NULL,
+		$dateTime = NULL,
+		$formatMask = NULL,
 		$timeZone = NULL,
-		$calendar = NULL
+		$intlDateType = NULL,
+		$intlTimeType = NULL,
+		$intlCalendar = NULL
 	) {
-		if ($dateTimeOrTimestamp === NULL) return '';
+		if ($dateTime === NULL) 
+			return '';
 		if ($this->intlExtensionFormatting) {
-			$dateType = $dateTypeOrFormatMask;
 			$formatter = $this->getIntlDatetimeFormatter(
 				$this->langAndLocale,
-				$dateType !== NULL
-					? $dateType
-					: $this->intlDefaultDateFormatter,
-				$timeType !== NULL
-					? $timeType
-					: $this->intlDefaultTimeFormatter,
+				$formatMask !== NULL
+					? $formatMask
+					: $this->defaultFormatMask,
 				$timeZone !== NULL
 					? $timeZone
-					: $this->intlDefaultTimeZone,
-				$calendar !== NULL
-					? $calendar
-					: $this->intlDefaultCalendar
+					: $this->defaultTimeZone,
+				$intlDateType !== NULL
+					? $intlDateType
+					: $this->defaultIntlDateType,
+				$intlTimeType !== NULL
+					? $intlTimeType
+					: $this->defaultIntlTimeType,
+				$intlCalendar !== NULL
+					? $intlCalendar
+					: $this->defaultIntlCalendar
 			);
-			return \datefmt_format($formatter, $dateTimeOrTimestamp);
+			return \datefmt_format($formatter, $dateTime);
 		} else {
 			if ($this->encodingConversion === NULL)
 				$this->setUpSystemLocaleAndEncodings();
@@ -252,12 +291,12 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 				$this->SetLangAndLocale('en', 'US')
 					->setUpSystemLocaleAndEncodings();
 			$result = \strftime(
-				$dateTypeOrFormatMask !== NULL
-					? $dateTypeOrFormatMask
-					: $this->strftimeFormatMask,
-				$dateTimeOrTimestamp instanceof \DateTime
-					? $dateTimeOrTimestamp->getTimestamp()
-					: intval($dateTimeOrTimestamp)
+				$formatMask !== NULL
+					? $formatMask
+					: $this->defaultFormatMask,
+				$dateTime instanceof \DateTime || $dateTime instanceof DateTimeImmutable
+					? $dateTime->getTimestamp()
+					: intval($dateTime)
 			);
 			return $this->encode($result);
 		}
@@ -265,21 +304,41 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 
 	/**
 	 * Get stored `\IntlDateFormatter` instance or create new one.
-	 * @param string|NULL $langAndLocale
-	 * @param int|NULL $dateType
-	 * @param int|NULL $timeType
-	 * @param string|\IntlTimeZone|\DateTimeZone|NULL $timeZone
-	 * @param int|NULL $calendar
+	 * @param  string|NULL                             $langAndLocale
+	 * @param  string|NULL                             $formatMask
+	 * @param  string|\DateTimeZone|\IntlTimeZone|NULL $timeZone
+	 * @param  int|NULL                                $dateType
+	 * @param  int|NULL                                $timeType
+	 * @param  int|NULL                                $calendar
 	 * @return \IntlDateFormatter
 	 */
-	protected function getIntlDatetimeFormatter ($langAndLocale = NULL, $dateType = NULL, $timeType = NULL, $timeZone = NULL, $calendar = NULL) {
+	protected function getIntlDatetimeFormatter ($langAndLocale, $formatMask, $timeZone, $dateType, $timeType, $calendar) {
+		if ($timeZone === NULL) {
+			$timeZoneStr = '';
+		} else if (is_string($timeZone)) {
+			$timeZoneStr = $timeZone;
+		} else if ($timeZone instanceof \DateTimeZone) {
+			$timeZoneStr = $timeZone->getName();
+		} else if ($this->intlExtensionFormatting && $timeZone instanceof \IntlTimeZone) {
+			$timeZoneStr = $timeZone->toDateTimeZone()->getName();
+		}
 		$key = implode('_', [
-			'datetime',
-			serialize(func_get_args())
+			'datetime', 
+			$langAndLocale,
+			$formatMask,
+			$timeZoneStr,
+			$dateType, 
+			$timeType, 
+			$calendar
 		]);
 		if (!isset($this->intlFormatters[$key])) {
 			$this->intlFormatters[$key] = \datefmt_create(
-				$this->langAndLocale, $dateType, $timeType, $timeZone, $calendar
+				$this->langAndLocale, 
+				$dateType, 
+				$timeType, 
+				$timeZone, 
+				$calendar,
+				$formatMask
 			);
 		}
 		return $this->intlFormatters[$key];
