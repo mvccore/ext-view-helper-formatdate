@@ -294,7 +294,7 @@ class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelpe
 				$formatMask !== NULL
 					? $formatMask
 					: $this->defaultFormatMask,
-				$dateTime instanceof \DateTime || $dateTime instanceof DateTimeImmutable
+				$dateTime instanceof \DateTime || $dateTime instanceof \DateTimeImmutable
 					? $dateTime->getTimestamp()
 					: intval($dateTime)
 			);
