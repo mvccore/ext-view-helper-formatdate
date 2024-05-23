@@ -19,7 +19,7 @@ namespace MvcCore\Ext\Views\Helpers;
  * - Possibility to configure format mask used by PHP `strftime(); for fallback`.
  * - System locale settings for fallback conversion automatically configured by request language and request locale.
  * - Fallback result string always returned in response encoding, in UTF-8 by default.
- * @method \MvcCore\Ext\Views\Helpers\FormatDateHelper GetInstance()
+ * @method static \MvcCore\Ext\Views\Helpers\FormatDateHelper GetInstance()
  */
 class FormatDateHelper extends \MvcCore\Ext\Views\Helpers\InternationalizedHelper {
 

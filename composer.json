@@ -30,7 +30,7 @@
 	"require": {
 		"php": ">=5.4.0",
 		"mvccore/mvccore": "^5.1.16",
-		"mvccore/ext-view-helper-internationalized": "^5.0"
+		"mvccore/ext-view-helper-internationalized": "^5.2"
 	},
 	"autoload": {
 		"classmap": [
